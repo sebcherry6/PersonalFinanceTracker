@@ -1,7 +1,7 @@
 ﻿using PersonalFinanceTracker.Models;
 using PersonalFinanceTracker.Services;
 
-List<Transaction> transactions = new();
+List<Transaction> transactions = DataService.Load();
 
 FinanceService financeService = new FinanceService(transactions);
 
@@ -17,7 +17,8 @@ while (running)
     Console.WriteLine("2. Add Expense");
     Console.WriteLine("3. View Transactions");
     Console.WriteLine("4. View Balance");
-    Console.WriteLine("5. Exit");
+    Console.WriteLine("5. Delete Transaction");
+    Console.WriteLine("6. Exit");
 
     Console.Write("Choose option: ");
     string choice = Console.ReadLine();
@@ -40,6 +41,7 @@ while (running)
                 );
 
                 financeService.AddTransaction(transaction);
+                DataService.Save(financeService.GetAll());
 
                 Console.WriteLine("Income added!");
                 break;
@@ -59,6 +61,7 @@ while (running)
                 );
 
                 financeService.AddTransaction(transaction);
+                DataService.Save(financeService.GetAll());
 
                 Console.WriteLine("Expense added!");
                 break;
@@ -66,10 +69,20 @@ while (running)
 
         case "3":
             {
-                foreach (var t in financeService.GetAll())
+                var list = financeService.GetAll();
+
+                if (list.Count == 0)
                 {
-                    Console.WriteLine($"{t.Date} | {t.TransactionType} | {t.Amount} | {t.Description} | {t.Category}");
+                    Console.WriteLine("No transactions found.");
+                    break;
                 }
+
+                for (int i = 0; i < list.Count; i++)
+                {
+                    var t = list[i];
+                    Console.WriteLine($"{i + 1}) {t.Date} | {t.TransactionType} | {t.Amount} | {t.Description} | {t.Category}");
+                }
+
                 break;
             }
 
@@ -81,7 +94,52 @@ while (running)
             }
 
         case "5":
+            {
+                var list = financeService.GetAll();
+
+                if (list.Count == 0)
+                {
+                    Console.WriteLine("No transactions to delete.");
+                    break;
+                }
+
+                for (int i = 0; i < list.Count; i++)
+                {
+                    var t = list[i];
+                    Console.WriteLine($"{i + 1}) {t.Date} | {t.TransactionType} | {t.Amount} | {t.Description} | {t.Category}");
+                }
+
+                Console.Write("Select number to delete: ");
+                string input = Console.ReadLine();
+
+                if (int.TryParse(input, out int index))
+                {
+                    index = index - 1;
+
+                    if (index >= 0 && index < list.Count)
+                    {
+                        var transaction = list[index];
+                        financeService.DeleteTransaction(transaction.Id);
+                        DataService.Save(financeService.GetAll());
+
+                        Console.WriteLine("Transaction deleted!");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid selection.");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input.");
+                }
+
+                break;
+            }
+
+        case "6":
             running = false;
+            DataService.Save(financeService.GetAll());
             Console.WriteLine("Exiting...");
             break;
 

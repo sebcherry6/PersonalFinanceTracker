@@ -37,4 +37,13 @@ namespace PersonalFinanceTracker.Services;
 
             return income - expense;
         }
-    }
+        public void DeleteTransaction(Guid id)
+        {
+            var transaction = _transactions.FirstOrDefault(t => t.Id == id);
+
+            if (transaction != null)
+            {
+                _transactions.Remove(transaction);
+            }
+        }
+}
