@@ -12,3 +12,4 @@ C:\Users\Sebastian\source\repos\PersonalFinanceTracker\PersonalFinanceTracker\ob
 C:\Users\Sebastian\source\repos\PersonalFinanceTracker\PersonalFinanceTracker\obj\Debug\net10.0\PersonalFinanceTracker.pdb
 C:\Users\Sebastian\source\repos\PersonalFinanceTracker\PersonalFinanceTracker\obj\Debug\net10.0\PersonalFinanceTracker.genruntimeconfig.cache
 C:\Users\Sebastian\source\repos\PersonalFinanceTracker\PersonalFinanceTracker\obj\Debug\net10.0\ref\PersonalFinanceTracker.dll
+C:\Users\Sebastian\source\repos\PersonalFinanceTracker\PersonalFinanceTracker\obj\Debug\net10.0\PersonalFinanceTracker.sourcelink.json

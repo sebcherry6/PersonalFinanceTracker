@@ -18,7 +18,10 @@ while (running)
     Console.WriteLine("3. View Transactions");
     Console.WriteLine("4. View Balance");
     Console.WriteLine("5. Delete Transaction");
-    Console.WriteLine("6. Exit");
+    Console.WriteLine("6. Edit Transaction");
+    Console.WriteLine("7. Filter Transactions");
+    Console.WriteLine("8. Summary");
+    Console.WriteLine("9. Exit");
 
     Console.Write("Choose option: ");
     string choice = Console.ReadLine();
@@ -136,8 +139,114 @@ while (running)
 
                 break;
             }
-
         case "6":
+            {
+                var list = financeService.GetAll();
+
+                if (list.Count == 0)
+                {
+                    Console.WriteLine("No transactions found.");
+                    break;
+                }
+
+                for (int i = 0; i < list.Count; i++)
+                {
+                    var t = list[i];
+
+                    Console.WriteLine(
+                        $"{i + 1}) {t.TransactionType} | {t.Amount:C} | {t.Description} | {t.Category}");
+                }
+
+                int index = (int)InputService.ReadDecimal("Select transaction: ") - 1;
+
+                if (index < 0 || index >= list.Count)
+                {
+                    Console.WriteLine("Invalid selection.");
+                    break;
+                }
+
+                decimal amount = InputService.ReadDecimal("New amount: ");
+                string description = InputService.ReadString("New description: ");
+                Category category = InputService.ReadCategory();
+
+                financeService.EditTransaction(
+                    list[index].Id,
+                    amount,
+                    description,
+                    category);
+
+                DataService.Save(financeService.GetAll());
+
+                Console.WriteLine("Transaction updated.");
+
+                break;
+            }
+        case "7":
+            {
+                Console.WriteLine("Filter by:");
+                Console.WriteLine("1. Income");
+                Console.WriteLine("2. Expense");
+                Console.WriteLine("3. Category");
+
+                Console.Write("Choose option: ");
+                string filterChoice = Console.ReadLine();
+
+                List<Transaction> filteredTransactions = new();
+
+                switch (filterChoice)
+                {
+                    case "1":
+                        filteredTransactions = financeService.GetByType(TransactionType.Income);
+                        break;
+
+                    case "2":
+                        filteredTransactions = financeService.GetByType(TransactionType.Expense);
+                        break;
+
+                    case "3":
+                        Category category = InputService.ReadCategory();
+                        filteredTransactions = financeService.GetByCategory(category);
+                        break;
+
+                    default:
+                        Console.WriteLine("Invalid option.");
+                        break;
+                }
+
+                if (filteredTransactions.Count == 0)
+                {
+                    Console.WriteLine("No matching transactions.");
+                }
+                else
+                {
+                    foreach (var transaction in filteredTransactions)
+                    {
+                        Console.WriteLine(
+                            $"{transaction.Date:d} | {transaction.TransactionType} | {transaction.Amount:C} | {transaction.Description} | {transaction.Category}");
+                    }
+                }
+
+                break;
+            }
+        case "8":
+            {
+                Console.Clear();
+
+                Console.WriteLine("========== SUMMARY ==========");
+                Console.WriteLine();
+
+                Console.WriteLine($"Total Income:     {financeService.GetTotalIncome():C}");
+                Console.WriteLine($"Total Expenses:   {financeService.GetTotalExpense():C}");
+                Console.WriteLine($"Current Balance:  {financeService.GetBalance():C}");
+                Console.WriteLine($"Transactions:     {financeService.GetAll().Count}");
+
+                Console.WriteLine();
+                Console.WriteLine("=============================");
+
+                break;
+            }
+
+        case "9":
             running = false;
             DataService.Save(financeService.GetAll());
             Console.WriteLine("Exiting...");

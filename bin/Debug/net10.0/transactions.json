@@ -1,1 +1,34 @@
-[]
+[
+  {
+    "Id": "6431138a-fdd8-43d8-9606-be1fbaba8c7a",
+    "Amount": 49999,
+    "Description": "Whatever 2",
+    "Date": "2026-06-30T00:20:46.9121216+01:00",
+    "TransactionType": 0,
+    "Category": 0
+  },
+  {
+    "Id": "38d1bba5-1870-4590-94c4-4d8f4b295270",
+    "Amount": 300,
+    "Description": "Whatever again",
+    "Date": "2026-06-30T00:21:03.871834+01:00",
+    "TransactionType": 0,
+    "Category": 0
+  },
+  {
+    "Id": "46c8f2e0-c490-4903-8f97-527c1f252fa5",
+    "Amount": 250,
+    "Description": "Something",
+    "Date": "2026-06-30T00:21:46.4080608+01:00",
+    "TransactionType": 1,
+    "Category": 1
+  },
+  {
+    "Id": "671638bc-e007-49be-bfd2-f4285e598482",
+    "Amount": 400,
+    "Description": "See",
+    "Date": "2026-06-30T00:22:08.3441051+01:00",
+    "TransactionType": 1,
+    "Category": 4
+  }
+]

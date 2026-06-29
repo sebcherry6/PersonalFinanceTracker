@@ -46,4 +46,47 @@ namespace PersonalFinanceTracker.Services;
                 _transactions.Remove(transaction);
             }
         }
+        public bool EditTransaction(
+        Guid id,
+        decimal amount,
+        string description,
+        Category category)
+        {
+            Transaction? transaction = _transactions.FirstOrDefault(t => t.Id == id);
+
+            if (transaction == null)
+                return false;
+
+            transaction.Amount = amount;
+            transaction.Description = description;
+            transaction.Category = category;
+
+            return true;
+        }
+        public List<Transaction> GetByCategory(Category category)
+        {
+            return _transactions
+                .Where(t => t.Category == category)
+                .ToList();
+        }
+
+        public List<Transaction> GetByType(TransactionType type)
+        {
+            return _transactions
+                .Where(t => t.TransactionType == type)
+                .ToList();
+        }
+        public decimal GetTotalIncome()
+        {
+            return _transactions
+                .Where(t => t.TransactionType == TransactionType.Income)
+                .Sum(t => t.Amount);
+        }
+
+        public decimal GetTotalExpense()
+        {
+            return _transactions
+                .Where(t => t.TransactionType == TransactionType.Expense)
+                .Sum(t => t.Amount);
+        }
 }
